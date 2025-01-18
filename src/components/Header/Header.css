@@ -1,0 +1,40 @@
+.header {
+    text-align: left;
+    margin-top: 50px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    display: inline-block;
+    position: relative;
+    color: #333;
+  }
+  
+
+  .title.typing::after {
+    content: "|";
+    font-weight: normal;
+    color: #333;
+    animation: blink 0.5s step-start infinite;
+    position: absolute;
+    right: -10px;
+  }
+  
+
+  .title.blinking::after {
+    content: "|";
+    font-weight: normal;
+    color: #333;
+    animation: blink 0.5s step-start infinite;
+    position: absolute;
+    right: -10px;
+  }
+  
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  
