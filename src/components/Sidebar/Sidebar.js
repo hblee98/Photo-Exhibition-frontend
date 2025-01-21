@@ -3,13 +3,19 @@ import "./Sidebar.css";
 const Sidebar = ({ regions, setSelectedRegion }) => {
   return (
     <div className="sidebar">
-      <h3>Regions</h3>
+      <h1>Regions</h1>
       <ul>
+        <li
+          onClick={() => setSelectedRegion(null)}
+          style={{ cursor: "pointer", fontWeight: "bold" }}
+        >
+          All Regions
+        </li>
         {regions.map((region, index) => (
           <li
             key={index}
-            onClick={() => setSelectedRegion(region)} 
-            style={{ cursor: "pointer" }} 
+            onClick={() => setSelectedRegion(region)}
+            style={{ cursor: "pointer" }}
           >
             {region}
           </li>
@@ -20,3 +26,4 @@ const Sidebar = ({ regions, setSelectedRegion }) => {
 };
 
 export default Sidebar;
+
