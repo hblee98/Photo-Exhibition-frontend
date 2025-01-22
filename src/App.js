@@ -9,6 +9,7 @@ const App = () => {
 
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(null);
+  const[allPhotos, setAllPhotos] = useState([]);
   const [photos, setPhotos] = useState([]);
 
 
@@ -26,22 +27,14 @@ const App = () => {
         
       })
       .then((data) => {
-        console.log("Fetched regions:", data);
         const sortedData = data.sort((a, b) => a.localeCompare(b));
         setRegions(sortedData);
       })
       .catch((error) => console.error("Error fetching regions:", error));
   }, []);
 
-  
-  
   useEffect(() => {
-    setPhotos([]); 
-    const endpoint = selectedRegion
-      ? `/api/photos/regions/${selectedRegion}`
-      : `/api/photos/all`;
-
-    fetch(endpoint, {
+    fetch(`/api/photos/all`, {
       headers: {
         "Cache-Control": "no-cache",
       },
@@ -51,21 +44,26 @@ const App = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
-      })  
+      })
       .then((data) => {
-        console.log("Fetched photos:", data);
+        setAllPhotos(data); 
         setPhotos(data);
-
       })
       .catch((error) => {
-        console.error("Error fetching photos:", error);
-  
+        console.error("Error fetching all photos:", error);
       });
-    console.log("Selected region :", selectedRegion);
-  }, [selectedRegion]);
+  }, []);
 
-
-
+  useEffect(() => {
+    if (selectedRegion) {
+      const filteredPhotos = allPhotos.filter(
+        (photo) => photo.region === selectedRegion
+      );
+      setPhotos(filteredPhotos);
+    } else {
+      setPhotos(allPhotos);
+    }
+  }, [selectedRegion, allPhotos]);
   
 
   return (
@@ -73,7 +71,11 @@ const App = () => {
       <Header />
       <div className="content">
         <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
-        <Gallery photos={photos} selectedRegion={selectedRegion} />
+        <Gallery 
+          allPhotos={allPhotos}
+          photos={photos}
+          selectedRegion={selectedRegion}
+        />
       </div>
     </div>
 
@@ -81,3 +83,4 @@ const App = () => {
 };
 
 export default App;
+
