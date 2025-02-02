@@ -7,23 +7,20 @@ const Gallery = ({
   photos,
   selectedRegion,
   selectedPhoto,
-  setSelectedPhoto,
-  setCenter,
-  center
+  setSelectedPhoto
 }) => {
 
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isRotating, setIsRotating] = useState(true);
   const [radiusX, setRadiusX] = useState(400);
   const [radiusY, setRadiusY] = useState(200);
-  const zDepth = 50;
+  const zDepth = 0;
   const angleStep = 360 / allPhotos.length;
   const [loading, setLoading] = useState(true);
   const [loadedPhotos, setLoadedPhotos] = useState([]);
   const BATCH_SIZE = 10;
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showFrontSide, setShowFrontSide] = useState(false);
-
   const [filmRotation, setFilmRotation] = useState({ x: 0, y: 0 });
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -50,24 +47,6 @@ const Gallery = ({
     }
     return result;
   };
-
-  useEffect(() => {
-    const updateCenter = () => {
-      const container = document.querySelector(".gallery");
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const containerCenterX = rect.width / 2;
-        const containerCenterY = rect.height / 2;
-        setCenter({ x: containerCenterX, y: containerCenterY });
-      }
-    };
-
-    updateCenter();
-    window.addEventListener("resize", updateCenter);
-    return () => {
-      window.removeEventListener("resize", updateCenter);
-    };
-  }, [setCenter]);
 
   useEffect(() => {
     if (!allPhotos || allPhotos.length === 0) return;
@@ -108,14 +87,15 @@ const Gallery = ({
 
   useEffect(() => {
     if (!isRotating) return;
-   
+
     const handleMouseMove = (e) => {
       const clientX = e.clientX;
       const innerWidth = window.innerWidth;
       if (innerWidth > 0) {
-        const relativeX = clientX / innerWidth;
-        const newAngle = relativeX * 360;
-        setRotationAngle((prevAngle) => prevAngle + (newAngle - prevAngle) * 0.05);
+        const relativeX = (clientX / innerWidth) * 2 - 1;
+        const newAngle = relativeX * 15;
+        const limitedAngle = Math.max(-15, Math.min(15, newAngle));
+        setRotationAngle((prevAngle) => prevAngle + (limitedAngle - prevAngle));
       }
     };
 
@@ -166,17 +146,17 @@ const Gallery = ({
   useEffect(() => {
     if (!selectedPhoto) return;
     
+    const MAX_ROTATION = 25;
+
     const handleMouseMove = (e) => {
       const film = document.querySelector(".photo-center");
-      if (!film) return; 
-      const rect = film.getBoundingClientRect();  
-
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      if (!film) return;
       
+      const rect = film.getBoundingClientRect();  
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2; 
       const mouseX = e.clientX - centerX;
       const mouseY = e.clientY - centerY;
-      
       const boundaryWidth = rect.width * 1.4;
       const boundaryHeight = rect.height * 1.4;
       
@@ -187,18 +167,13 @@ const Gallery = ({
         setFilmRotation({ x: 0, y: 0 });
         return;
       }
-
       const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
       const maxDistance = Math.sqrt((rect.width / 2) * (rect.width / 2) + (rect.height / 2) * (rect.height / 2));
-      
       const weight = Math.min(distance / maxDistance, 1);
-      
       const relativeX = (mouseX / (rect.width / 2)) * weight;
       const relativeY = (mouseY / (rect.height / 2)) * weight;
-
-      const MAX_ROTATION = 20;
-      const rotateY = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, relativeX * 30));
-      const rotateX = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, -relativeY * 30));
+      const rotateY = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, relativeX * MAX_ROTATION));
+      const rotateX = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, -relativeY * MAX_ROTATION));
       
       setFilmRotation({ x: rotateX, y: rotateY });
     };
@@ -241,15 +216,13 @@ const Gallery = ({
       <div className="circle-container">
         {loadedPhotos.map((photo, index) => {
           const angle = angleStep * index + rotationAngle;
-          const centerYOffset = window.innerHeight * 0.05;
           const x = radiusX * Math.cos((angle * Math.PI) / 180);
-          const y = radiusY * Math.sin((angle * Math.PI) / 180) + centerYOffset;
+          const y = radiusY * Math.sin((angle * Math.PI) / 180);
           const z =
             photos.some((p) => p.id === photo.id)
               ? zDepth
               : 0;
           const rotateY = angle;
-          
           // Divide conditions
           const isPhotoSelected = selectedPhoto && selectedPhoto.id === photo.id;
           const isRegionSelected = selectedRegion && photo.region === selectedRegion;
@@ -283,8 +256,7 @@ const Gallery = ({
             >
               <PhotoItem 
                 photo={photo} 
-                scale={1} 
-                angle={rotateY} 
+                scale={0.7} 
                 showFront={showFrontSide}
               />
             </div>
@@ -296,7 +268,7 @@ const Gallery = ({
           className={`photo-center ${selectedPhoto.height > selectedPhoto.width ? 'mini' : 'square'}`}
           style={{
             position: "absolute",
-            top: `${window.innerHeight * 0.6}px`,
+            top: `${window.innerHeight * 0.5}px`,
             left: `${window.innerWidth * 0.5}px`,
             transform: `translate(-50%, -50%) 
                         perspective(1000px)

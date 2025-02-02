@@ -9,7 +9,7 @@ const transformImageURL = (url) => {
   return url;
 };
 
-const PhotoItem = ({ photo, scale = 1, angle, showFront = false, isFlipped = false }) => {
+const PhotoItem = ({ photo, scale = 1, showFront = false, isFlipped = false }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [isPortrait, setIsPortrait] = useState(false);
 

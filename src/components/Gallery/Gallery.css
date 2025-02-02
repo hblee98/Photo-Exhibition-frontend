@@ -1,23 +1,22 @@
 .gallery{
   flex: 1;
-  padding: 30px;
-  height: 100vh; 
+  height: 80vh; 
   width: 100vw;
 }
 .circle-container {
   position: absolute;
   width: 100vw; 
-  height: 100vh;
+  height: 75vh;
   perspective: 1000px;
   display: flex; 
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
 .photo-wrapper {
   position: absolute;
   width: 9vw;
   height: 4vw;
-  transform-origin: center; 
+  transform-origin: center bottom; 
   transition: transform 0.1s ease-in-out; 
   margin: 15px;
   pointer-events: auto;
@@ -75,6 +74,9 @@
 .photo-wrapper.not-selected {
   opacity: 0.5;
   transform: translateY(500px);
+}
+.photo-wrapper:hover {
+  z-index: 10;
 }
 .loading-screen {
   position: absolute;

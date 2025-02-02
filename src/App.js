@@ -16,7 +16,7 @@ const App = () => {
   const [allPhotos, setAllPhotos] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [center, setCenter] = useState({ x: 0, y: 0 });
+
 
   useEffect(() => {
     // Fetch regions
@@ -77,8 +77,6 @@ const App = () => {
           selectedRegion={selectedRegion}
           setSelectedPhoto={setSelectedPhoto}
           selectedPhoto={selectedPhoto}
-          setCenter={setCenter}
-          center={center}
         />
       </div>
     </div>
