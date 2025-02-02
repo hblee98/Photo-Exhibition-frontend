@@ -4,7 +4,7 @@ import "./Header.css";
 const Header = () => {
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(0);
-  const [isTyping, setIsTyping] = useState(true); 
+  const [isTyping, setIsTyping] = useState(true);
   const fullText = 'Photo Exhibition';
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Header = () => {
   }, [count, isTyping, fullText]);
 
   return (
-    <header className="header">
+    <header>
       <h1 className={`title ${isTyping ? "typing" : "blinking"}`}>{title}</h1>
     </header>
   );

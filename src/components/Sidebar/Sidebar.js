@@ -1,9 +1,8 @@
 import "./Sidebar.css";
 
-const Sidebar = ({ regions, setSelectedRegion }) => {
+const Sidebar = ({ regions , setSelectedRegion }) => {
   return (
     <div className="sidebar">
-      <h1>Regions</h1>
       <ul>
         <li
           onClick={() => setSelectedRegion(null)}
@@ -26,4 +25,3 @@ const Sidebar = ({ regions, setSelectedRegion }) => {
 };
 
 export default Sidebar;
-

@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-
 import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Gallery from "./components/Gallery/Gallery"
 
+const API_ENDPOINTS = {
+  REGIONS: '/api/photos/regions',
+  ALL_PHOTOS: '/api/photos/all'
+};
+
 const App = () => {
-
+  
   const [regions, setRegions] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const[allPhotos, setAllPhotos] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState(undefined);
+  const [allPhotos, setAllPhotos] = useState([]);
   const [photos, setPhotos] = useState([]);
-
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [center, setCenter] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    fetch(`/api/photos/regions`, {
-      headers: {
-        "Cache-Control": "no-cache",
-      },
+    // Fetch regions
+    fetch(API_ENDPOINTS.REGIONS, {
     })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
-        
       })
       .then((data) => {
         const sortedData = data.sort((a, b) => a.localeCompare(b));
@@ -34,10 +36,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`/api/photos/all`, {
-      headers: {
-        "Cache-Control": "no-cache",
-      },
+    fetch(API_ENDPOINTS.ALL_PHOTOS, {
     })
       .then((response) => {
         if (!response.ok) {
@@ -55,32 +54,35 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedRegion) {
+    if (selectedRegion === undefined) {
+      setPhotos(allPhotos);
+    } else if (selectedRegion === null) {
+      setPhotos(allPhotos);
+    } else {
       const filteredPhotos = allPhotos.filter(
         (photo) => photo.region === selectedRegion
       );
       setPhotos(filteredPhotos);
-    } else {
-      setPhotos(allPhotos);
     }
   }, [selectedRegion, allPhotos]);
-  
 
   return (
     <div className="app">
       <Header />
+      <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
       <div className="content">
-        <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
         <Gallery 
           allPhotos={allPhotos}
           photos={photos}
           selectedRegion={selectedRegion}
+          setSelectedPhoto={setSelectedPhoto}
+          selectedPhoto={selectedPhoto}
+          setCenter={setCenter}
+          center={center}
         />
       </div>
     </div>
-
   )
 };
 
 export default App;
-

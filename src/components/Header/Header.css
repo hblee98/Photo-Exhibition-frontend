@@ -2,7 +2,8 @@
     text-align: left;
     margin-top: 50px;
     flex: 0 0 auto;
-    width: 100%;
+    width: 100vw;
+    height: 10vh;
   }
   
   .title {
@@ -11,6 +12,7 @@
     display: inline-block;
     position: relative;
     color: #333;
+    height: 5vh;
   }
   
 
