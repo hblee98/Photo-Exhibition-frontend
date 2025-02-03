@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import "./PhotoItem.css";
 
-const transformImageURL = (url) => {
-  if (!url) return "";
-  if (url.includes("https://drive.google.com/uc?id=")) {
-    return url.replace("uc?id=", "thumbnail?id=");
-  }
-  return url;
-};
-
 const PhotoItem = ({ photo, scale = 1, showFront = false, isFlipped = false }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [isPortrait, setIsPortrait] = useState(false);
@@ -19,7 +11,7 @@ const PhotoItem = ({ photo, scale = 1, showFront = false, isFlipped = false }) =
       if (cachedUrl) {
         setImageUrl(cachedUrl);
       } else {
-        const url = transformImageURL(photo.webContentLink);
+        const url = `${photo.filePath}`;
         localStorage.setItem(`photo-${photo.id}`, url);
         setImageUrl(url);
       }

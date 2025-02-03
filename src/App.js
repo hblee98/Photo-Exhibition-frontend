@@ -16,6 +16,7 @@ const App = () => {
   const [allPhotos, setAllPhotos] = useState([]);
   const [photos, setPhotos] = useState([]);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  
 
 
   useEffect(() => {
@@ -45,8 +46,12 @@ const App = () => {
         return response.json();
       })
       .then((data) => {
-        setAllPhotos(data); 
-        setPhotos(data);
+        const formattedPhotos = data.map(photo => ({
+          ...photo,
+          filePath: `${photo.filePath}`
+        }));
+        setAllPhotos(formattedPhotos); 
+        setPhotos(formattedPhotos);
       })
       .catch((error) => {
         console.error("Error fetching all photos:", error);

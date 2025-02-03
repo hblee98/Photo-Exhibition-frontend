@@ -12,7 +12,7 @@ const Gallery = ({
 
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isRotating, setIsRotating] = useState(true);
-  const [radiusX, setRadiusX] = useState(400);
+  const [radiusX, setRadiusX] = useState(550);
   const [radiusY, setRadiusY] = useState(200);
   const zDepth = 0;
   const angleStep = 360 / allPhotos.length;
@@ -151,7 +151,7 @@ const Gallery = ({
     const handleMouseMove = (e) => {
       const film = document.querySelector(".photo-center");
       if (!film) return;
-      
+
       const rect = film.getBoundingClientRect();  
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2; 
@@ -256,7 +256,7 @@ const Gallery = ({
             >
               <PhotoItem 
                 photo={photo} 
-                scale={0.7} 
+                scale={0.6} 
                 showFront={showFrontSide}
               />
             </div>
