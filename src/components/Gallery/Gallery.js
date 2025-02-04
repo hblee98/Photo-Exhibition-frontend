@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PhotoItem from "../PhotoItem/PhotoItem";
 import "./Gallery.css";
+import characterImg from "../../assets/hb.PNG";
 
 const Gallery = ({
   allPhotos,
-  photos,
   selectedRegion,
   selectedPhoto,
   setSelectedPhoto
@@ -14,7 +14,6 @@ const Gallery = ({
   const [isRotating, setIsRotating] = useState(true);
   const [radiusX, setRadiusX] = useState(550);
   const [radiusY, setRadiusY] = useState(200);
-  const zDepth = 0;
   const angleStep = 360 / allPhotos.length;
   const [loading, setLoading] = useState(true);
   const [loadedPhotos, setLoadedPhotos] = useState([]);
@@ -23,6 +22,7 @@ const Gallery = ({
   const [showFrontSide, setShowFrontSide] = useState(false);
   const [filmRotation, setFilmRotation] = useState({ x: 0, y: 0 });
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isCharacterFlipped, setIsCharacterFlipped] = useState(false);
 
   const shuffleArray = (array, seed) => {
     const result = [...array];
@@ -146,48 +146,63 @@ const Gallery = ({
   useEffect(() => {
     if (!selectedPhoto) return;
     
-    const MAX_ROTATION = 25;
-
     const handleMouseMove = (e) => {
       const film = document.querySelector(".photo-center");
       if (!film) return;
 
-      const rect = film.getBoundingClientRect();  
+      const rect = film.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2; 
-      const mouseX = e.clientX - centerX;
-      const mouseY = e.clientY - centerY;
-      const boundaryWidth = rect.width * 1.4;
-      const boundaryHeight = rect.height * 1.4;
+      const centerY = rect.top + rect.height / 2;
       
-      if (
-        Math.abs(mouseX) > boundaryWidth / 2 ||
-        Math.abs(mouseY) > boundaryHeight / 2
-      ) {
+      const distanceX = e.clientX - centerX;
+      const distanceY = e.clientY - centerY;
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      
+      const radius = rect.width * 0.8;
+      
+      if (distance < radius) {
+        const normalizedX = distanceX / (rect.width / 2);
+        const normalizedY = distanceY / (rect.height / 2);
+        const rotateX = isFlipped ? -normalizedY * 20 : normalizedY * 20;
+        const rotateY = isFlipped ? normalizedX * 20 : -normalizedX * 20;
+        
+        setFilmRotation({
+          x: rotateX,
+          y: rotateY
+        });
+      } else {
         setFilmRotation({ x: 0, y: 0 });
-        return;
       }
-      const distance = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
-      const maxDistance = Math.sqrt((rect.width / 2) * (rect.width / 2) + (rect.height / 2) * (rect.height / 2));
-      const weight = Math.min(distance / maxDistance, 1);
-      const relativeX = (mouseX / (rect.width / 2)) * weight;
-      const relativeY = (mouseY / (rect.height / 2)) * weight;
-      const rotateY = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, relativeX * MAX_ROTATION));
-      const rotateX = Math.max(-MAX_ROTATION, Math.min(MAX_ROTATION, -relativeY * MAX_ROTATION));
-      
-      setFilmRotation({ x: rotateX, y: rotateY });
+    };
+
+    const handleMouseLeave = () => {
+      setFilmRotation({ x: 0, y: 0 });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
+    document.querySelector(".photo-center")?.addEventListener('mouseleave', handleMouseLeave);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      document.querySelector(".photo-center")?.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [selectedPhoto]);
+  }, [selectedPhoto, isFlipped]);
 
   useEffect(() => {
     setIsFlipped(false);
   }, [selectedPhoto]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const galleryCenter = window.innerWidth / 2;
+      setIsCharacterFlipped(e.clientX > galleryCenter);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -199,11 +214,13 @@ const Gallery = ({
           />
         </div>
         <div className="loading-text">
-          Loading Photos... {Math.round(loadingProgress)}%
+          Loading Memories... {Math.round(loadingProgress)}%
         </div>
       </div>
     );
   }
+
+  const zOffsets = [-600, -150, -50, -100];
 
   return (
     <div className="gallery"
@@ -214,28 +231,50 @@ const Gallery = ({
       }}
     >
       <div className="circle-container">
+        <div className="character-container">
+          <img 
+            src={characterImg} 
+            alt="character"
+            style={{
+              transform: `scaleX(${isCharacterFlipped ? -1 : 1})`,
+              transition: 'transform 0.3s ease'
+            }}
+          />
+        </div>
+
         {loadedPhotos.map((photo, index) => {
+          const totalPhotos = loadedPhotos.length;
+          const photosPerSection = Math.ceil(totalPhotos / 4);
+          const sectionIndex = Math.floor(index / photosPerSection);
+          
           const angle = angleStep * index + rotationAngle;
-          const x = radiusX * Math.cos((angle * Math.PI) / 180);
-          const y = radiusY * Math.sin((angle * Math.PI) / 180);
-          const z =
-            photos.some((p) => p.id === photo.id)
-              ? zDepth
-              : 0;
-          const rotateY = angle;
-          // Divide conditions
+          const sectionOffset = sectionIndex * (360 / 16);
+          const adjustedAngle = angle + sectionOffset;
+
+          const sectorRadiusX = radiusX + (sectionIndex * 30);
+          const sectorRadiusY = radiusY + (sectionIndex * 20);
+          
+          const zDepthBase = zOffsets[sectionIndex] || 0;
+          const zDepthWave = Math.sin((adjustedAngle * Math.PI) / 180) * 30;
+          const zDepth = zDepthBase + zDepthWave;
+          
+          const scale = Math.max(0.7, 1 - (zDepth / 1500));
+
+          const x = sectorRadiusX * Math.cos((adjustedAngle * Math.PI) / 180);
+          const y = sectorRadiusY * Math.sin((adjustedAngle * Math.PI) / 180);
+          
           const isPhotoSelected = selectedPhoto && selectedPhoto.id === photo.id;
           const isRegionSelected = selectedRegion && photo.region === selectedRegion;
           
           let wrapperClass;
           if (isPhotoSelected) {
-            wrapperClass = "selected"
+            wrapperClass = "selected";
           } else if (isRegionSelected) {
-            wrapperClass = "region-selected"
+            wrapperClass = "region-selected";
           } else if (!selectedPhoto && !selectedRegion) {
-            wrapperClass = "default"
+            wrapperClass = "default";
           } else {
-            wrapperClass = "not-selected"
+            wrapperClass = "not-selected";
           }
 
           const shouldShowFront = showFrontSide;
@@ -245,7 +284,9 @@ const Gallery = ({
               key={photo.id}
               className={`photo-wrapper ${wrapperClass}`}
               style={{
-                transform: `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}deg)`,
+                transform: `translate3d(${x}px, ${y}px, ${zDepth}px) rotateY(${adjustedAngle}deg) scale(${scale})`,
+                transition: "transform 0.3s ease",
+                zIndex: 1000 + Math.round(zDepth),
               }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -254,18 +295,25 @@ const Gallery = ({
                 }
               }}
             >
-              <PhotoItem 
-                photo={photo} 
-                scale={0.6} 
-                showFront={showFrontSide}
-              />
+              <div
+                style={{
+                transform: `rotateY(-${adjustedAngle}deg)`,
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <PhotoItem
+                  photo={photo} 
+                  scale={0.7} 
+                  showFront={showFrontSide}
+                />
+              </div>
             </div>
           );
         })}
       </div>
       {selectedPhoto && (
         <div 
-          className={`photo-center ${selectedPhoto.height > selectedPhoto.width ? 'mini' : 'square'}`}
+          className={`photo-center ${selectedPhoto.height > selectedPhoto.width ? 'mini' : 'square'} ${isFlipped ? 'flipped' : ''}`}
           style={{
             position: "absolute",
             top: `${window.innerHeight * 0.5}px`,
@@ -276,6 +324,13 @@ const Gallery = ({
                         rotateX(${filmRotation.x}deg)`,
             transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             transformStyle: 'preserve-3d'
+          }}
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
+            e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
           }}
           onClick={(e) => {
             e.stopPropagation();
