@@ -1,45 +1,46 @@
 import { useState, useEffect } from "react";
-import "./PhotoItem.css";
+import "./FilmItem.css";
 
-const PhotoItem = ({ photo, scale = 1, showFront = false, isFlipped = false }) => {
+const FilmItem = ({ film, scale = 1, showFront = false, isFlipped = false }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [isPortrait, setIsPortrait] = useState(false);
-
+  
   useEffect(() => {
-    if (photo) {
-      const cachedUrl = localStorage.getItem(`photo-${photo.id}`);
+    if (film) {
+      const cachedUrl = localStorage.getItem(`film-${film.id}`);
       if (cachedUrl) {
         setImageUrl(cachedUrl);
       } else {
-        const url = `${photo.filePath}`;
-        localStorage.setItem(`photo-${photo.id}`, url);
+        const url = `${film.thumbnailFilePath}`;
+        localStorage.setItem(`film-${film.id}`, url);
         setImageUrl(url);
       }
     }
-  }, [photo]);
+  }, [film]);
 
   useEffect(() => {
-    if (photo) {
-      setIsPortrait(photo.height > photo.width);
+    if (film) {
+      setIsPortrait(film.height > film.width);
     }
-  }, [photo]);
+  }, [film]);
   
-  if (!photo) return null;
+  if (!film) return null;
   
   return (
     <div
       className={`film-frame ${isPortrait ? "mini" : "square"}`}
-      style={{ transform: `scale(${scale})` }}
+      style={{ 
+        transform: `scale(${scale})`}}
     >
       <div className={`film ${showFront ? 'front' : ''} ${isFlipped ? 'flipped' : ''}`}>
         <div className="front-side">
           <img
             src={imageUrl}
-            alt={photo.description}
+            alt={film.description}
             className="photo-image"
           />
           <div className="text-container">
-            <p className="text">{photo.description || "No description available"}</p>
+            <p className="text">{film.description || "No description available"}</p>
           </div>
         </div>
         <div className="back-side">
@@ -52,4 +53,4 @@ const PhotoItem = ({ photo, scale = 1, showFront = false, isFlipped = false }) =
   );
 };
 
-export default PhotoItem;
+export default FilmItem; 

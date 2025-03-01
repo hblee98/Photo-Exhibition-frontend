@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import PhotoItem from "../PhotoItem/PhotoItem";
+import FilmItem from "../FilmItem/FilmItem";
 import "./Gallery.css";
 import characterImg from "../../assets/hb.PNG";
 
 const Gallery = ({
   allPhotos,
   selectedRegion,
-  selectedPhoto,
-  setSelectedPhoto
 }) => {
 
   const [rotationAngle, setRotationAngle] = useState(0);
@@ -23,6 +21,7 @@ const Gallery = ({
   const [filmRotation, setFilmRotation] = useState({ x: 0, y: 0 });
   const [isFlipped, setIsFlipped] = useState(false);
   const [isCharacterFlipped, setIsCharacterFlipped] = useState(false);
+  const [selectedFilm, setSelectedFilm] = useState(null);
 
   const shuffleArray = (array, seed) => {
     const result = [...array];
@@ -82,8 +81,8 @@ const Gallery = ({
   }, [allPhotos]);
 
   useEffect(() => {
-    setIsRotating(!selectedRegion && !selectedPhoto);
-  }, [selectedRegion, selectedPhoto]);
+    setIsRotating(!selectedRegion && !selectedFilm);
+  }, [selectedRegion, selectedFilm]);
 
   useEffect(() => {
     if (!isRotating) return;
@@ -123,17 +122,18 @@ const Gallery = ({
 
   useEffect(() => {
     const handleExitClick = (e) => {
-      const popup = document.querySelector(".photo-item");
+      const popup = document.querySelector(".film-item");
       if (popup && popup.contains(e.target)) {
+        console.log('popup done:');
         return;
       }
-      setSelectedPhoto(null);
+      setSelectedFilm(null);
     };
     document.addEventListener("click", handleExitClick);
     return () => {
       document.removeEventListener("click", handleExitClick);
     };
-  }, [setSelectedPhoto]);
+  }, [setSelectedFilm]);
   
   useEffect(() => {
     if (selectedRegion === undefined) {
@@ -144,10 +144,10 @@ const Gallery = ({
   }, [selectedRegion]);
 
   useEffect(() => {
-    if (!selectedPhoto) return;
+    if (!selectedFilm) return;
     
     const handleMouseMove = (e) => {
-      const film = document.querySelector(".photo-center");
+      const film = document.querySelector(".film-center");
       if (!film) return;
 
       const rect = film.getBoundingClientRect();
@@ -180,17 +180,14 @@ const Gallery = ({
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    document.querySelector(".photo-center")?.addEventListener('mouseleave', handleMouseLeave);
+    document.querySelector(".film-center")?.addEventListener('mouseleave', handleMouseLeave);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.querySelector(".photo-center")?.removeEventListener('mouseleave', handleMouseLeave);
+      document.querySelector(".film-center")?.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [selectedPhoto, isFlipped]);
+  }, [selectedFilm, isFlipped]);
 
-  useEffect(() => {
-    setIsFlipped(false);
-  }, [selectedPhoto]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -226,7 +223,7 @@ const Gallery = ({
     <div className="gallery"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
-          setSelectedPhoto(null);
+          setSelectedFilm(null);
         }
       }}
     >
@@ -258,31 +255,31 @@ const Gallery = ({
           const zDepthWave = Math.sin((adjustedAngle * Math.PI) / 180) * 30;
           const zDepth = zDepthBase + zDepthWave;
           
-          const scale = Math.max(0.7, 1 - (zDepth / 1500));
+          const scale = 1;
 
           const x = sectorRadiusX * Math.cos((adjustedAngle * Math.PI) / 180);
           const y = sectorRadiusY * Math.sin((adjustedAngle * Math.PI) / 180);
           
-          const isPhotoSelected = selectedPhoto && selectedPhoto.id === photo.id;
+          const isFilmSelected = selectedFilm && selectedFilm.id === photo.id;
           const isRegionSelected = selectedRegion && photo.region === selectedRegion;
           
           let wrapperClass;
-          if (isPhotoSelected) {
+          if (isFilmSelected) {
             wrapperClass = "selected";
           } else if (isRegionSelected) {
             wrapperClass = "region-selected";
-          } else if (!selectedPhoto && !selectedRegion) {
+          } else if (!selectedFilm && !selectedRegion) {
             wrapperClass = "default";
           } else {
             wrapperClass = "not-selected";
-          }
+          } 
 
           const shouldShowFront = showFrontSide;
           
           return (
             <div
               key={photo.id}
-              className={`photo-wrapper ${wrapperClass}`}
+              className={`film-wrapper ${wrapperClass}`}
               style={{
                 transform: `translate3d(${x}px, ${y}px, ${zDepth}px) rotateY(${adjustedAngle}deg) scale(${scale})`,
                 transition: "transform 0.3s ease",
@@ -291,19 +288,18 @@ const Gallery = ({
               onClick={(e) => {
                 e.stopPropagation();
                 if (shouldShowFront) {
-                  setSelectedPhoto(photo);
+                  setSelectedFilm(photo);
                 }
               }}
             >
               <div
                 style={{
-                transform: `rotateY(-${adjustedAngle}deg)`,
+                  transform: `rotateY(-${adjustedAngle}deg)`,
                   backfaceVisibility: "hidden",
                 }}
               >
-                <PhotoItem
-                  photo={photo} 
-                  scale={0.7} 
+                <FilmItem
+                  film={photo}
                   showFront={showFrontSide}
                 />
               </div>
@@ -311,9 +307,9 @@ const Gallery = ({
           );
         })}
       </div>
-      {selectedPhoto && (
+      {selectedFilm && (
         <div 
-          className={`photo-center ${selectedPhoto.height > selectedPhoto.width ? 'mini' : 'square'} ${isFlipped ? 'flipped' : ''}`}
+          className={`film-center ${selectedFilm.height > selectedFilm.width ? 'mini' : 'square'} ${isFlipped ? 'flipped' : ''}`}
           style={{
             position: "absolute",
             top: `${window.innerHeight * 0.5}px`,
@@ -334,11 +330,12 @@ const Gallery = ({
           }}
           onClick={(e) => {
             e.stopPropagation();
+            console.log('Center film clicked');
             setIsFlipped(prev => !prev);
           }}
         >
-          <PhotoItem 
-            photo={selectedPhoto}
+          <FilmItem 
+            film={selectedFilm}
             showFront={true}
             isFlipped={isFlipped}
           />

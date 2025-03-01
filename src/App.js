@@ -3,10 +3,13 @@ import "./App.css";
 import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Gallery from "./components/Gallery/Gallery"
+import MobileHeader from "./components/MobileHeader/MobileHeader"
+import MobileSidebar from "./components/MobileSidebar/MobileSidebar"
+import MobileGallery from "./components/MobileGallery/MobileGallery"
 
 const API_ENDPOINTS = {
   REGIONS: '/api/photos/regions',
-  ALL_PHOTOS: '/api/photos/all'
+  ALL_PHOTOS: '/api/photos/thumbnails'
 };
 
 const App = () => {
@@ -14,10 +17,7 @@ const App = () => {
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState(undefined);
   const [allPhotos, setAllPhotos] = useState([]);
-  const [photos, setPhotos] = useState([]);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  
-
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // Fetch regions
@@ -34,7 +34,7 @@ const App = () => {
         setRegions(sortedData);
       })
       .catch((error) => console.error("Error fetching regions:", error));
-  }, []);
+  }, []); 
 
   useEffect(() => {
     fetch(API_ENDPOINTS.ALL_PHOTOS, {
@@ -48,41 +48,52 @@ const App = () => {
       .then((data) => {
         const formattedPhotos = data.map(photo => ({
           ...photo,
-          filePath: `${photo.filePath}`
+          thumbnailFilePath: `${photo.thumbnailFilePath}`,
+          originFilePath: `${photo.originFilePath}`
         }));
         setAllPhotos(formattedPhotos); 
-        setPhotos(formattedPhotos);
       })
       .catch((error) => {
         console.error("Error fetching all photos:", error);
       });
   }, []);
 
+  const checkIsMobile = () => {
+    const isMobileWidth = window.innerWidth <= 768;
+    const isTabletWidth = window.innerWidth <= 1024;
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    setIsMobile((isMobileWidth && !isTabletWidth) || (isMobileDevice && !isTabletWidth));
+  };
   useEffect(() => {
-    if (selectedRegion === undefined) {
-      setPhotos(allPhotos);
-    } else if (selectedRegion === null) {
-      setPhotos(allPhotos);
-    } else {
-      const filteredPhotos = allPhotos.filter(
-        (photo) => photo.region === selectedRegion
-      );
-      setPhotos(filteredPhotos);
-    }
-  }, [selectedRegion, allPhotos]);
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   return (
     <div className="app">
-      <Header />
-      <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
       <div className="content">
-        <Gallery 
-          allPhotos={allPhotos}
-          photos={photos}
-          selectedRegion={selectedRegion}
-          setSelectedPhoto={setSelectedPhoto}
-          selectedPhoto={selectedPhoto}
-        />
+        {isMobile ? (
+          <>
+            <MobileHeader />
+            <MobileSidebar regions={regions} setSelectedRegion={setSelectedRegion} />
+            <MobileGallery 
+              allPhotos={allPhotos}
+              selectedRegion={selectedRegion}
+            />
+          </>
+        ) : (
+          <>
+            <Header />
+            <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
+            <Gallery 
+              allPhotos={allPhotos}
+              selectedRegion={selectedRegion}
+            />
+          </>
+        )}
       </div>
     </div>
   )

@@ -11,6 +11,12 @@
 # production
 /build
 
+#temp
+src/components/MobileGallery
+src/components/MobileHeader
+src/components/MobileSidebar
+src/components/MobileFilmItem
+
 # misc
 .DS_Store
 .env.local
