@@ -1,12 +1,10 @@
 .film-frame {
-    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     position: relative;
     box-sizing: border-box;
+       transform-style: preserve-3d;
     perspective: 1000px;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
 }
 .film-frame.square {

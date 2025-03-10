@@ -1,19 +1,25 @@
 .header {
     text-align: left;
-    margin-top: 50px;
-    flex: 0 0 auto;
+    margin: 0;
+    padding: 0.5vh;
     width: 100vw;
-    height: 10vh;
-  }
+    height: 3vh;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+}
   
-  .title {
-    font-size: 2rem;
+.title {
+    font-size: 3vh;
     font-weight: bold;
     display: inline-block;
     position: relative;
     color: #333;
-    height: 5vh;
-  }
+    margin: 0;
+    padding: 0;
+}
   
 
   .title.typing::after {

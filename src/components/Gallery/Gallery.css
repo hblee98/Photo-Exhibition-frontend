@@ -1,126 +1,219 @@
-.gallery{
-    flex: 1;
-    height: 80vh; 
-    width: 100vw;
+.gallery {
+  position: fixed;
+  top: 3vh;
+  left: 15vw;
+  width: 85vw;
+  height: 97vh;
+  overflow: hidden;
+}
+
+.circle-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.film-wrapper {
+  position: absolute;
+  transform-origin: center bottom;
+  transition: transform 0.1s ease-in-out;
+  margin: 1vh;
+  box-sizing: border-box;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 1;
+}
+
+.film-item {
+  width: 8vw;
+  height: 3.5vw;
+  object-fit: cover;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.film-center {
+  position: absolute;
+  top: 40vh;
+  left: 40vw;
+  transform-style: preserve-3d;
+  z-index: 2000;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  will-change: transform;
+  perspective: 1000px;
+}
+
+.film-center.flipped .film-frame {
+  transform: rotateY(180deg);
+}
+
+.film-center .film-frame {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.film-center .film-frame .front-side {
+  backface-visibility: hidden;
+  transform: rotateY(0deg);
+}
+
+.film-center .film-frame .back-side {
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+.film-center.flipped .film-frame .front-side {
+  transform: rotateY(180deg);
+}
+
+.film-center.flipped .film-frame .back-side {
+  transform: rotateY(360deg);
+}
+
+.film-center .film-frame.square {
+  width: 22vw;
+  height: 40vh;
+}
+
+.film-center .film-frame.square .photo-image {
+  width: 20vw;
+  height: 24vh;
+}
+
+.film-center .film-frame.mini {
+  width: 16.84vw;
+  height: 40vh;
+}
+
+.film-center .film-frame.mini .photo-image {
+  width: 14.84vw;
+  height: 24vh;
+}
+
+.film-center .film-frame.square .text-container {
+  padding: 10px 20px;
+}
+
+.film-center .film-frame.square .text {
+  font-size: 18px; 
+}
+
+.film-center .film-frame.mini .text-container {
+  padding: 10px 20px;
+}
+
+.film-center .film-frame.mini .text {
+  font-size: 18px;
+}
+
+.film-wrapper.default {
+  opacity: 1; 
+  transform: translateY(0); 
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.film-wrapper.selected {
+  z-index: 10;
+  transform: translateY(0) scale(1.2);
+  opacity: 1;
+}
+
+.film-wrapper.region-selected {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.film-wrapper.not-selected {
+  opacity: 0.5;
+  transform: translateY(500px);
+}
+
+.film-wrapper:hover {
+  z-index: 10;
+}
+
+.loading-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.loading-bar-container {
+  width: 300px;
+  height: 10px;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.loading-bar {
+  height: 100%;
+  background-color: #333;
+  transition: width 0.3s ease;
+}
+
+.loading-text {
+  color: #333;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.character-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  cursor: pointer;
+  width: 12vw;
+  height: 12vh;
+}
+
+.character-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  will-change: transform;
+}
+
+.click-me-text {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: bounce 1s infinite;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.click-me-text.hidden {
+  opacity: 0;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
   }
-  .circle-container {
-    position: absolute;
-    width: 100vw; 
-    height: 75vh;
-    perspective: 1000px;
-    display: flex; 
-    align-items: center;
-    justify-content: center;
+  50% {
+    transform: translateX(-50%) translateY(-10px);
   }
-  .film-wrapper {
-    position: absolute;
-    transform-origin: center bottom; 
-    transition: transform 0.1s ease-in-out; 
-    margin: 15px;
-    box-sizing: border-box;
-    cursor: pointer;
-    pointer-events: all;
-    z-index: 1;
-  }
-  .film-item {
-    width: 9vw; 
-    height: 4vw; 
-    object-fit: cover; 
-    border-radius: 8px; 
-    pointer-events: none;
-  }
-  .film-center .film-frame.square {
-    width: 22vw;
-    height: 40vh;
-  }
-  .film-center .film-frame.square .photo-image {
-    width: 20vw;
-    height: 24vh;
-  }
-  .film-center .film-frame.mini {
-    width: 16.84vw;
-    height: 40vh;
-  }
-  .film-center .film-frame.mini .photo-image {
-    width: 14.84vw;
-    height: 24vh;
-  }
-  .film-center .film-frame.square .text-container {
-    padding: 10px 20px;
-  }
-  .film-center .film-frame.square .text {
-    font-size: 18px; 
-  }
-  .film-center .film-frame.mini .text-container {
-    padding: 10px 20px;
-  }
-  .film-center .film-frame.mini .text {
-    font-size: 18px;
-  }
-  .film-wrapper.default {
-    opacity: 1; 
-    transform: translateY(0); 
-    transition: transform 0.5s ease, opacity 0.5s ease;
-  }
-  .film-wrapper.selected {
-    z-index: 10;
-    transform: translateY(0) scale(1.2);
-    opacity: 1;
-  }
-  .film-wrapper.region-selected {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  .film-wrapper.not-selected {
-    opacity: 0.5;
-    transform: translateY(500px);
-  }
-  .film-wrapper:hover {
-    z-index: 10;
-  }
-  .loading-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-  }
-  .loading-bar-container {
-    width: 300px;
-    height: 10px;
-    background-color: #f3f3f3;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .loading-bar {
-    height: 100%;
-    background-color: #333;
-    transition: width 0.3s ease;
-  }
-  .loading-text {
-    color: #333;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-  .character-container {
-    position: absolute;
-    left: 50%;
-    top: 52%;
-    transform: translate(-50%, -50%);
-    width: 15vw;
-    height: 15vh;
-    z-index: 500;
-    pointer-events: none;
-  }
-  .character-container img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain;
-    will-change: transform;
-  }
+}

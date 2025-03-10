@@ -11,11 +11,9 @@
 # production
 /build
 
-#temp
-src/components/MobileGallery
-src/components/MobileHeader
-src/components/MobileSidebar
-src/components/MobileFilmItem
+/src/components/MobileFilmItem
+/src/components/MobileGallery
+/src/components/MobileHeader
 
 # misc
 .DS_Store

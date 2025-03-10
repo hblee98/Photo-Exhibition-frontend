@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import FilmItem from "../FilmItem/FilmItem";
 import "./Gallery.css";
 import characterImg from "../../assets/hb.PNG";
 
-const Gallery = ({
-  allPhotos,
-  selectedRegion,
-}) => {
-
+const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isRotating, setIsRotating] = useState(true);
   const [radiusX, setRadiusX] = useState(550);
@@ -22,6 +18,18 @@ const Gallery = ({
   const [isFlipped, setIsFlipped] = useState(false);
   const [isCharacterFlipped, setIsCharacterFlipped] = useState(false);
   const [selectedFilm, setSelectedFilm] = useState(null);
+  const [showClickMe, setShowClickMe] = useState(true);
+
+  const handleReset = () => {
+    setSelectedFilm(null);
+    setShowFrontSide(false);
+    setRotationAngle(0);
+    setShowClickMe(true);
+  };
+
+  useImperativeHandle(ref, () => ({
+    handleReset
+  }));
 
   const shuffleArray = (array, seed) => {
     const result = [...array];
@@ -232,11 +240,16 @@ const Gallery = ({
           <img 
             src={characterImg} 
             alt="character"
-            style={{
-              transform: `scaleX(${isCharacterFlipped ? -1 : 1})`,
-              transition: 'transform 0.3s ease'
+            style={{ transform: `scaleX(${isCharacterFlipped ? -1 : 1})`}}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowFrontSide(true);
+              setShowClickMe(false);
             }}
           />
+          <div className={`click-me-text ${!showClickMe ? 'hidden' : ''}`}>
+            Click me!
+          </div>
         </div>
 
         {loadedPhotos.map((photo, index) => {
@@ -282,7 +295,6 @@ const Gallery = ({
               className={`film-wrapper ${wrapperClass}`}
               style={{
                 transform: `translate3d(${x}px, ${y}px, ${zDepth}px) rotateY(${adjustedAngle}deg) scale(${scale})`,
-                transition: "transform 0.3s ease",
                 zIndex: 1000 + Math.round(zDepth),
               }}
               onClick={(e) => {
@@ -312,8 +324,8 @@ const Gallery = ({
           className={`film-center ${selectedFilm.height > selectedFilm.width ? 'mini' : 'square'} ${isFlipped ? 'flipped' : ''}`}
           style={{
             position: "absolute",
-            top: `${window.innerHeight * 0.5}px`,
-            left: `${window.innerWidth * 0.5}px`,
+            top: `${window.innerHeight * 0.4}px`,
+            left: `${window.innerWidth * 0.4}px`,
             transform: `translate(-50%, -50%) 
                         perspective(1000px)
                         rotateY(${filmRotation.y + (isFlipped ? 180 : 0)}deg) 
@@ -330,7 +342,6 @@ const Gallery = ({
           }}
           onClick={(e) => {
             e.stopPropagation();
-            console.log('Center film clicked');
             setIsFlipped(prev => !prev);
           }}
         >
@@ -343,6 +354,6 @@ const Gallery = ({
       )}
     </div>
   );
-};
+});
 
 export default Gallery;
