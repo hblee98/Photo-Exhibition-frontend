@@ -5,7 +5,7 @@ const MobileHeader = ({ onReset }) => {
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
-  const fullText = 'Photo Exhibition';
+  const fullText = process.env.REACT_APP_APP_NAME || 'Photo Exhibition';
 
   useEffect(() => {
     if (!isTyping) return;
