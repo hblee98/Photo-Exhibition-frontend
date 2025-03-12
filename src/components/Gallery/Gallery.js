@@ -142,14 +142,7 @@ const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
       document.removeEventListener("click", handleExitClick);
     };
   }, [setSelectedFilm]);
-  
-  useEffect(() => {
-    if (selectedRegion === undefined) {
-      setShowFrontSide(false);
-    } else {
-      setShowFrontSide(true);
-    }
-  }, [selectedRegion]);
+
 
   useEffect(() => {
     if (!selectedFilm) return;
