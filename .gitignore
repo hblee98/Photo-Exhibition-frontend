@@ -11,10 +11,6 @@
 # production
 /build
 
-/src/components/MobileFilmItem
-/src/components/MobileGallery
-/src/components/MobileHeader
-
 # misc
 .DS_Store
 .env.local

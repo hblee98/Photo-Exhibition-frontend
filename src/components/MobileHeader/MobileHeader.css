@@ -1,0 +1,35 @@
+.mobile-header {
+  width: 100%;
+  height: 3%;
+  margin: 0;
+  flex: 0 0 auto;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-title {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+}
+
+.mobile-title.typing::after {
+  content: '|';
+  margin-left: 2px;
+  animation: blink 0.7s infinite;
+}
+
+.mobile-title.blinking::after {
+  content: '|';
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
