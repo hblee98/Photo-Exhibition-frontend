@@ -72,7 +72,6 @@
         try {
 
           await preloadImage(characterImg, 'character');
-          console.log('Character image loaded');
 
           await Promise.all(allPhotos.map(photo => 
             preloadImage(photo.thumbnailFilePath, photo.id)
