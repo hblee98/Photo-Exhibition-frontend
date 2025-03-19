@@ -360,7 +360,7 @@
               e.stopPropagation();
               if (!isCharacterFlipped) {
                 setIsCharacterFlipped(true);
-                setIsFlipped(false);
+                setShowFrontSide(true);
               } else if (!isCharacterMoved) {
                 const startRotation = rotationAngle;
                 let start = null;
