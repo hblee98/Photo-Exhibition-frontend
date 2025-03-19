@@ -360,7 +360,7 @@
               e.stopPropagation();
               if (!isCharacterFlipped) {
                 setIsCharacterFlipped(true);
-                setShowFrontSide(true);
+                setIsFlipped(false);
               } else if (!isCharacterMoved) {
                 const startRotation = rotationAngle;
                 let start = null;
@@ -399,7 +399,7 @@
                 };
                 requestAnimationFrame(animate);
               } else {
-                setShowFrontSide(prev => !prev);
+                setIsFlipped(prev => !prev);
               }
             }}
           />

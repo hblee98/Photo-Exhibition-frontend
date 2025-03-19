@@ -224,28 +224,36 @@
 
 .selected-film-wrapper .mobile-film-frame.square .mobile-photo-image {
   width: 53.9055vw;
-  height: 29.403vh;
+  height: calc(43.1244vh * 0.7);
+  margin-top: 20px;
 }
 
 .selected-film-wrapper .mobile-film-frame.mini .mobile-photo-image {
   width: 42.9286vw;
-  height: 28.7496vh;
+  height: calc(43.1244vh * 0.7);
+  margin-top: 20px;
 }
 
 .selected-film-wrapper .mobile-film-frame.square .mobile-text-container {
-  padding: 12px 20px;
+  height: calc(43.1244vh * 0.3);
 }
 
 .selected-film-wrapper .mobile-film-frame.square .mobile-text {
-  font-size: 15px; 
+  font-size: 15px;
+  text-align: right;
+  width: 90%;
+  margin-top: 10px;
 }
 
 .selected-film-wrapper .mobile-film-frame.mini .mobile-text-container {
-  padding: 10px 20px;
+  height: calc(43.1244vh * 0.3);
 }
 
 .selected-film-wrapper .mobile-film-frame.mini .mobile-text {
   font-size: 15px;
+  text-align: right;
+  width: 90%;
+  margin-top: 10px;
 }
 
 .selected-film-wrapper .mobile-film-frame .mobile-back-side {
@@ -284,14 +292,4 @@
 
 .selected-film-wrapper .mobile-film-frame.flipped .mobile-back-side {
   transform: rotateY(0deg);
-}
-
-.selected-film-wrapper .mobile-film-frame .mobile-front-side {
-  margin: 1.2vh 0 0 0;
-  box-sizing: border-box;
-}
-
-.selected-film-wrapper .mobile-film-frame .mobile-photo-image {
-  margin: 1.2vh 0 0 0;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
