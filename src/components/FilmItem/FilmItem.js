@@ -32,7 +32,7 @@ const FilmItem = ({ film, scale = 1, showFront = false, isFlipped = false }) => 
       style={{ 
         transform: `scale(${scale})`}}
     >
-      <div className={`film ${showFront ? 'front' : ''} ${isFlipped ? 'flipped' : ''}`}>
+      <div className={`film ${isFlipped ? 'flipped' : ''}`}>
         <div className="front-side">
           <img
             src={imageUrl}

@@ -161,10 +161,10 @@
         setTouchStart(null);
       };
 
-      window.addEventListener('wheel', handleScroll, { passive: false });
-      window.addEventListener('touchstart', handleTouchStart, { passive: false });
-      window.addEventListener('touchmove', handleTouchMove, { passive: false });
-      window.addEventListener('touchend', handleTouchEnd, { passive: false });
+      window.addEventListener('wheel', handleScroll, { passive: true });
+      window.addEventListener('touchstart', handleTouchStart, { passive: true });
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
+      window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
       return () => {
         window.removeEventListener('wheel', handleScroll);
@@ -262,7 +262,6 @@
             }}
             onTouchMove={(e) => {
               e.stopPropagation();
-              e.preventDefault();
               
               const film = document.querySelector(".selected-film-wrapper");
               if (!film) return;
@@ -394,7 +393,7 @@
                           setIsFlipped(false);
                         }
                         
-                      }, 3000);
+                      }, 1000);
                     }, 500);
                   }
                 };

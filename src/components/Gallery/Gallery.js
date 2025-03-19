@@ -279,8 +279,6 @@ const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
           } else {
             wrapperClass = "not-selected";
           } 
-
-          const shouldShowFront = showFrontSide;
           
           return (
             <div
@@ -292,8 +290,9 @@ const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                if (shouldShowFront) {
+                if (showFrontSide) {
                   setSelectedFilm(photo);
+                  setIsFlipped(false);
                 }
               }}
             >
@@ -306,6 +305,7 @@ const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
                 <FilmItem
                   film={photo}
                   showFront={showFrontSide}
+                  isFlipped={!showFrontSide}
                 />
               </div>
             </div>
@@ -321,21 +321,14 @@ const Gallery = forwardRef(({allPhotos, selectedRegion}, ref) => {
             left: `${window.innerWidth * 0.4}px`,
             transform: `translate(-50%, -50%) 
                         perspective(1000px)
-                        rotateY(${filmRotation.y + (isFlipped ? 180 : 0)}deg) 
-                        rotateX(${filmRotation.x}deg)`,
-            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            transformStyle: 'preserve-3d'
-          }}
-          onMouseMove={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-            e.currentTarget.style.setProperty('--mouse-x', `${x}%`);
-            e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
+                        rotateX(${filmRotation.x}deg)
+                        rotateY(${filmRotation.y}deg)`,
+            transition: filmRotation.x === 0 && filmRotation.y === 0 ? 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
           }}
           onClick={(e) => {
             e.stopPropagation();
             setIsFlipped(prev => !prev);
+            setFilmRotation({ x: 0, y: 0 });
           }}
         >
           <FilmItem 

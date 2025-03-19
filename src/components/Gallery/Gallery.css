@@ -44,38 +44,31 @@
   left: 40vw;
   transform-style: preserve-3d;
   z-index: 2000;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   will-change: transform;
   perspective: 1000px;
-}
-
-.film-center.flipped .film-frame {
-  transform: rotateY(180deg);
+  background: transparent;
 }
 
 .film-center .film-frame {
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
   backface-visibility: hidden;
+  box-shadow: none;
+  background: transparent;
 }
 
-.film-center .film-frame .front-side {
+.film-center .film-frame .front-side,
+.film-center .film-frame .back-side {
   backface-visibility: hidden;
-  transform: rotateY(0deg);
 }
 
 .film-center .film-frame .back-side {
-  backface-visibility: hidden;
   transform: rotateY(180deg);
 }
 
-.film-center.flipped .film-frame .front-side {
+.film-center.flipped .film {
   transform: rotateY(180deg);
-}
-
-.film-center.flipped .film-frame .back-side {
-  transform: rotateY(360deg);
 }
 
 .film-center .film-frame.square {

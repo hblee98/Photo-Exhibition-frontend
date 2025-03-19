@@ -11,25 +11,25 @@
 }
 
 .mobile-film-frame.square {
-    width: 16.5vw;
-    height: 11.88vh;
+    width: 19.965vw;
+    height: 14.3748vh;
 }
 
 .mobile-film-frame.square .mobile-photo-image {
-    width: 14.85vw;
-    height: 8.1vh;
-    object-fit: cover;
+    width: 17.9685vw;
+    height: 9.801vh;
+    object-fit: fill;
 }
 
 .mobile-film-frame.mini {
-    width: 13.2vw;
-    height: 11.88vh;
+    width: 17.072vw;
+    height: 14.3748vh;
 }
 
 .mobile-film-frame.mini .mobile-photo-image {
-    width: 11.22vw;
-    height: 7.92vh;
-    object-fit: cover;
+    width: 14.872vw;
+    height: 9.5832vh;
+    object-fit: fill;
 }
 
 .mobile-film {
@@ -57,12 +57,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1vh;
+    padding: 0.4vh;
     box-sizing: border-box;
 }
 
 .mobile-front-side .mobile-photo-image {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 1vh;
 }
 
 .mobile-text-container {
@@ -75,7 +76,7 @@
 
 .mobile-text {
     font-family: "Sour Gummy", serif;
-    font-size: 0.4vh;
+    font-size: 0.5324vh;
     margin: 0;
 }
 
@@ -97,9 +98,9 @@
     background-color: #61636E;
     color: #ffffff;
     width: 100%;
-    padding: 0.6vh;
+    padding: 0.726vh;
     text-align: center;
-    font-size: 0.5vh;
+    font-size: 0.605vh;
     box-sizing: border-box;
 }
 
