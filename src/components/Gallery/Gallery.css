@@ -4,7 +4,6 @@
   left: 15vw;
   width: 85vw;
   height: 97vh;
-  overflow: hidden;
 }
 
 .circle-container {
@@ -15,8 +14,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   transition: transform 0.3s ease;
+  
 }
 
 .film-wrapper {

@@ -392,7 +392,7 @@
                           setSelectedFilm(loadedPhotos[targetIndex]);
                           setIsFlipped(false);
                         }
-                        
+    
                       }, 1000);
                     }, 500);
                   }

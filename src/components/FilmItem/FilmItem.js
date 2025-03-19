@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./FilmItem.css";
 
-const FilmItem = ({ film, scale = 1, showFront = false, isFlipped = false }) => {
+const FilmItem = ({ film, scale = 1, isFlipped = false }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [isPortrait, setIsPortrait] = useState(false);
   
