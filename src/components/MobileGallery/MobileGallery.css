@@ -213,7 +213,7 @@
 }
 
 .selected-film-wrapper .mobile-film-frame.square {
-  width: 59.895vw;
+  width: 60.895vw;
   height: 43.1244vh;
 }
 
@@ -226,12 +226,16 @@
   width: 53.9055vw;
   height: calc(43.1244vh * 0.7);
   margin-top: 20px;
+  object-fit: cover;
+  overflow: hidden;
 }
 
 .selected-film-wrapper .mobile-film-frame.mini .mobile-photo-image {
   width: 42.9286vw;
   height: calc(43.1244vh * 0.7);
   margin-top: 20px;
+  object-fit: cover;
+  overflow: hidden;
 }
 
 .selected-film-wrapper .mobile-film-frame.square .mobile-text-container {

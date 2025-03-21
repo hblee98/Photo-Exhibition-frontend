@@ -11,14 +11,15 @@
 }
 
 .mobile-film-frame.square {
-    width: 19.965vw;
+    width: 21.965vw;
     height: 14.3748vh;
 }
 
 .mobile-film-frame.square .mobile-photo-image {
     width: 17.9685vw;
-    height: 9.801vh;
-    object-fit: fill;
+    height: 8.801vh;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .mobile-film-frame.mini {
@@ -28,8 +29,9 @@
 
 .mobile-film-frame.mini .mobile-photo-image {
     width: 14.872vw;
-    height: 9.5832vh;
-    object-fit: fill;
+    height: 8.801vh;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .mobile-film {
