@@ -1,9 +1,7 @@
 .mobile-film-frame {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     position: relative;
-    box-sizing: border-box;
     perspective: 1000px;
     transform-style: preserve-3d;
     transition: transform 0.6s ease;
@@ -11,7 +9,7 @@
 }
 
 .mobile-film-frame.square {
-    width: 21.965vw;
+    width: 20.965vw;
     height: 14.3748vh;
 }
 
@@ -59,7 +57,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.4vh;
     box-sizing: border-box;
 }
 
@@ -69,17 +66,15 @@
 }
 
 .mobile-text-container {
-    width: 100%;
+    width: 80%;
+    height: calc(14.3748vh * 0.3);
     text-align: right;
-    box-sizing: border-box;
-    margin-top: auto;
-    margin-bottom: 0.5vh;
 }
 
 .mobile-text {
     font-family: "Sour Gummy", serif;
     font-size: 0.5324vh;
-    margin: 0;
+    margin-top: 20px;
 }
 
 .mobile-back-side {

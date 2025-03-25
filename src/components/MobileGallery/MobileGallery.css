@@ -245,7 +245,7 @@
 .selected-film-wrapper .mobile-film-frame.square .mobile-text {
   font-size: 15px;
   text-align: right;
-  width: 90%;
+  width: 100%;
   margin-top: 60px;
 }
 
@@ -256,7 +256,7 @@
 .selected-film-wrapper .mobile-film-frame.mini .mobile-text {
   font-size: 15px;
   text-align: right;
-  width: 90%;
+  width: 100%;
   margin-top: 60px;
 }
 
