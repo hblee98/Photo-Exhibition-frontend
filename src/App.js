@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
 import Gallery from "./components/Gallery/Gallery"
 import MobileHeader from "./components/MobileHeader/MobileHeader"
 import MobileGallery from "./components/MobileGallery/MobileGallery"
+import PhotoManagement from "./components/Admin/PhotoManagement"
+import Login from './components/Admin/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const API_ENDPOINTS = {
   REGIONS: '/api/photos/regions',
@@ -73,38 +77,61 @@ const App = () => {
   }, []);
 
   return (
-    <div className="app">
-      <div className="content">
-        {isMobile ? (
-          <>
-            <MobileHeader onReset={() => {
-              if (mobileGalleryRef.current) {
-                mobileGalleryRef.current.handleReset();
+    <Router>
+      <div className="app">
+        <div className="content">
+          <Routes>
+            <Route path="/" element={
+              isMobile ? (
+                <>
+                  <MobileHeader onReset={() => {
+                    if (mobileGalleryRef.current) {
+                      mobileGalleryRef.current.handleReset();
+                    }
+                  }} />
+                  <MobileGallery 
+                    ref={mobileGalleryRef}
+                    allPhotos={allPhotos}
+                    selectedRegion={selectedRegion}
+                  />
+                </>
+              ) : (
+                <>
+                  <Header onGalleryClick={() => {
+                    if (galleryRef.current) {
+                      galleryRef.current.handleReset();
+                    }
+                  }} />
+                  <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
+                  <Gallery 
+                    ref={galleryRef}
+                    allPhotos={allPhotos}
+                    selectedRegion={selectedRegion}
+                  />
+                </>
+              )
+            } />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login/*"
+              element={
+                <ProtectedRoute>
+                  <PhotoManagement photos={allPhotos} />
+                </ProtectedRoute>
               }
-            }} />
-            <MobileGallery 
-              ref={mobileGalleryRef}
-              allPhotos={allPhotos}
-              selectedRegion={selectedRegion}
             />
-          </>
-        ) : (
-          <>
-              <Header onReset={() => {
-                if (galleryRef.current) {
-                  galleryRef.current.handleReset();
-                }
-              }} />
-            <Sidebar regions={regions} setSelectedRegion={setSelectedRegion} />
-            <Gallery 
-              ref={galleryRef}
-              allPhotos={allPhotos}
-              selectedRegion={selectedRegion}
+            <Route
+              path="/photo-management"
+              element={
+                <ProtectedRoute>
+                  <PhotoManagement photos={allPhotos} />
+                </ProtectedRoute>
+              }
             />
-          </>
-        )}
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   )
 };
 

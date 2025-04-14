@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 
-const Header = ({ onReset }) => {
+const Header = ({ onGalleryClick, onAdminClick }) => {
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
@@ -33,7 +33,7 @@ const Header = ({ onReset }) => {
     <header>
       <h1
         className={`title ${isTyping ? "typing" : "blinking"}`}
-        onClick={onReset}
+        onClick={onAdminClick || onGalleryClick}
       >{title}
       </h1>
     </header>
