@@ -170,6 +170,7 @@
   will-change: transform;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  background: transparent;
 }
 
 .arrow-button {
@@ -177,7 +178,6 @@
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.8);
-  border: none;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -187,7 +187,11 @@
   cursor: pointer;
   z-index: 2600;
   font-size: 24px;
+  color: #333;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .arrow-button.left {
@@ -199,7 +203,8 @@
 }
 
 .arrow-button:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .selected-film-wrapper {
