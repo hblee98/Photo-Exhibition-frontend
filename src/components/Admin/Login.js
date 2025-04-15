@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import './Login.css';
 
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://hblee98.com' 
+  : '';
+
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -12,12 +16,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/admin/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
+        credentials: 'include'
       });
 
       const data = await response.json();

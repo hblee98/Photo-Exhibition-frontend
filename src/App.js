@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header"
 import Sidebar from "./components/Sidebar/Sidebar"
@@ -10,9 +10,15 @@ import PhotoManagement from "./components/Admin/PhotoManagement"
 import Login from './components/Admin/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
+
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://hblee98.com' 
+  : '';
+
 const API_ENDPOINTS = {
-  REGIONS: '/api/photos/regions',
-  ALL_PHOTOS: '/api/photos/thumbnails'
+  REGIONS: `${API_BASE_URL}/api/photos/regions`,
+  ALL_PHOTOS: `${API_BASE_URL}/api/photos/thumbnails`,
+  LOGIN: `${API_BASE_URL}/api/admin/login`
 };
 
 const App = () => {
@@ -27,6 +33,7 @@ const App = () => {
   useEffect(() => {
     // Fetch regions
     fetch(API_ENDPOINTS.REGIONS, {
+      credentials: 'include'
     })
       .then((response) => {
         if (!response.ok) {
@@ -43,6 +50,7 @@ const App = () => {
 
   useEffect(() => {
     fetch(API_ENDPOINTS.ALL_PHOTOS, {
+      credentials: 'include'
     })
       .then((response) => {
         if (!response.ok) {
@@ -53,8 +61,8 @@ const App = () => {
       .then((data) => {
         const formattedPhotos = data.map(photo => ({
           ...photo,
-          thumbnailFilePath: `${photo.thumbnailFilePath}`,
-          originFilePath: `${photo.originFilePath}`
+          thumbnailFilePath: `${API_BASE_URL}${photo.thumbnailFilePath}`,
+          originFilePath: `${API_BASE_URL}${photo.originFilePath}`
         }));
         setAllPhotos(formattedPhotos); 
       })
